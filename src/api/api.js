@@ -58,3 +58,13 @@ export const deleteProduct = async (id) => {
     throw new Error("Failed to delete product");
   }
 };
+
+export const getFilterOptions = async () => {
+  try {
+    const response = await axiosInstance.get("/products/filters");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching filter options:", error);
+    return { types: [], brands: [], sizes: [], colors: [] };
+  }
+};
