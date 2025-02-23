@@ -44,7 +44,12 @@ const ProductList = () => {
   const fetchFilterOptions = async () => {
     try {
       const options = await getFilterOptions();
-      setFilterOptions(options);
+      setFilterOptions({
+        types: options.types.sort(), // Sort alphabetically (A-Z)
+        brands: options.brands.sort(), // Sort alphabetically (A-Z)
+        sizes: options.sizes.sort((a, b) => a - b), // Sort numerically (smallest to largest)
+        colors: options.colors.sort(), // Sort alphabetically (A-Z)
+      });
     } catch (error) {
       console.error(error);
     }
@@ -77,8 +82,8 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl p-6 flex flex-col items-center">
-      <h1 className="text-center text-3xl font-bold my-4">Shoes Tracker</h1>
+    <div className="w-full max-w-4xl mx-auto p-6 flex flex-col items-center">
+      <h1 className="text-center text-4xl font-bold my-4">Shoes Tracker</h1>
 
       {/* Toggle Button for Adding Product */}
       <button
@@ -98,7 +103,7 @@ const ProductList = () => {
 
       {/* Search and Filters */}
       <div className="bg-gray-100 max-w-2xl p-4 rounded-lg">
-        <h2 className="text-lg font-semibold">Search and Filters</h2>
+        <h3 className="text-lg font-semibold">Search and Filters</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-3">
           <input
             type="text"
@@ -111,6 +116,7 @@ const ProductList = () => {
           <select
             name="type"
             className="p-2 border rounded bg-gray-200 text-black"
+            value={filters.type}
             onChange={handleFilterChange}
           >
             <option value="">Type</option>
@@ -123,6 +129,7 @@ const ProductList = () => {
           <select
             name="brand"
             className="p-2 border rounded bg-gray-200 text-black"
+            value={filters.brand}
             onChange={handleFilterChange}
           >
             <option value="">Brand</option>
@@ -135,6 +142,7 @@ const ProductList = () => {
           <select
             name="size"
             className="p-2 border rounded bg-gray-200 text-black"
+            value={filters.size}
             onChange={handleFilterChange}
           >
             <option value="">Size</option>
@@ -147,6 +155,7 @@ const ProductList = () => {
           <select
             name="color"
             className="p-2 border rounded bg-gray-200 text-black"
+            value={filters.color}
             onChange={handleFilterChange}
           >
             <option value="">Color</option>

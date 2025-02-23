@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { addProduct } from "../api/api";
 
 const ProductForm = ({ onProductAdded }) => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -16,12 +18,19 @@ const ProductForm = ({ onProductAdded }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleError = (error) => {
+    setErrorMessage("Failed to add product. Please try again.");
+    setSuccessMessage("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await addProduct(formData);
       onProductAdded();
+      setSuccessMessage("Product added successfully");
+      setErrorMessage("");
       setFormData({
         name: "",
         type: "",
@@ -32,19 +41,20 @@ const ProductForm = ({ onProductAdded }) => {
       });
     } catch (error) {
       console.error(error);
+      handleError(error);
     }
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg shadow-md w-full max-w-2xl mb-8">
-      <h2 className="text-lg font-semibold mb-4">Add Product</h2>
+    <div className="bg-gray-100 p-4 rounded-lg shadow-md w-full max-w-xl mb-8">
+      <h3 className="text-lg font-semibold mb-4">Add Product</h3>
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Name
+            Product Name
           </label>
           <input
             type="text"
@@ -117,6 +127,7 @@ const ProductForm = ({ onProductAdded }) => {
             name="quantity"
             value={formData.quantity}
             onChange={handleChange}
+            onInput={handleChange}
             required
           />
         </div>
@@ -128,6 +139,15 @@ const ProductForm = ({ onProductAdded }) => {
             Add Product
           </button>
         </div>
+        {/*  Success Message */}
+        {successMessage && (
+          <div className="text-sm text-green-500 mb-4">{successMessage}</div>
+        )}
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="text-sm text-red-500 mb-4">{errorMessage}</div>
+        )}
       </form>
     </div>
   );

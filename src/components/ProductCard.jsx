@@ -19,7 +19,10 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedProduct({ ...editedProduct, [name]: value });
+    setEditedProduct({
+      ...editedProduct,
+      [name]: name === "quantity" ? Number(value) : value,
+    });
   };
 
   return (
@@ -34,7 +37,17 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
         <button className="btn btn-warning me-2" onClick={handleEditClick}>
           Edit
         </button>
-        <button className="btn btn-danger" onClick={() => onDelete(product.id)}>
+        <button
+          className="btn btn-danger"
+          onClick={() => {
+            const confirmDelete = window.confirm(
+              `Are you sure you want to delete ${product.name}?`
+            );
+            if (confirmDelete) {
+              onDelete(product.id);
+            }
+          }}
+        >
           Delete
         </button>
 
