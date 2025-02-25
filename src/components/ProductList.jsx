@@ -167,15 +167,16 @@ const ProductList = () => {
           </select>
           <button
             className="bg-blue-500 text-white p-2 rounded"
-            onClick={() =>
+            onClick={() => {
               setFilters({
                 search: "",
                 type: "",
                 brand: "",
                 size: "",
                 color: "",
-              })
-            }
+              });
+              fetchProducts();
+            }}
           >
             Clear
           </button>
